@@ -9,7 +9,7 @@ class CustomList:
         print("Created new CustomList with capacity:", self.capacity)
         print("Current size:", self.size)
 
-    # 1. append(element)
+    # Task2
     def append(self, element):
         if self.size < self.capacity:
             self.arr[self.size] = element
@@ -18,7 +18,6 @@ class CustomList:
         else:
             print("List is full")
 
-    # 2. get(index)
     def get(self, index):
         if 0 <= index < self.size:
             return self.arr[index]
@@ -26,7 +25,6 @@ class CustomList:
             print("Invalid index")
             return None
 
-    # 3. set(index, element)
     def set(self, index, element):
         if 0 <= index < self.size:
             self.arr[index] = element
@@ -34,12 +32,11 @@ class CustomList:
         else:
             print("Invalid index")
 
-    # 4. size()
     def get_size(self):
         return self.size
 
 
-# Example run
+
 my_list = CustomList()
 
 my_list.append(7)
