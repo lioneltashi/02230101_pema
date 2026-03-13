@@ -42,7 +42,7 @@ class CustomList:
 # Example run
 my_list = CustomList()
 
-my_list.append(5)
+my_list.append(7)
 
 print("Element at index 0:", my_list.get(0))
 
