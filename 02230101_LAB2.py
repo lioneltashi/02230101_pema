@@ -1,14 +1,14 @@
     # (Task 1) Implementing the Node and List Class Structure
 class Node:
     def __init__(self, data):
-        self.data = data      # store value
-        self.next = None      # pointer to next node
+        self.data = data      
+        self.next = None     
 
 class LinkedList:
     def __init__(self):
-        self.head = None      # first node
-        self.tail = None      # last node
-        self._size = 0        # size counter
+        self.head = None      
+        self.tail = None      
+        self._size = 0        
 
         print("Created new LinkedList")
         print("Current size:", self._size)
@@ -81,13 +81,13 @@ class LinkedList:
 
         print("Print Linked list: [" + " ".join(elements) + "]")
 
-ll = LinkedList()
+Hey = LinkedList()
 
 # Add elements
-ll.append(20)      
-ll.append(30)     
-ll.prepend(10)   
-ll.get(1) 
-ll.set(2, 40) 
-ll.size()   
-ll.print_list()
+Hey.append(20)      
+Hey.append(30)     
+Hey.prepend(10)   
+Hey.get(1) 
+Hey.set(2, 40) 
+Hey.size()   
+Hey.print_list()
