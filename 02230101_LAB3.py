@@ -62,7 +62,6 @@ class ArrayStack:
             print("Display stack:", self._stack[:self._top + 1])
 
 if __name__ == "__main__":
-    print("=== ArrayStack Example ===")
     array_stack = ArrayStack()
     array_stack.push(15)
     array_stack.push(31)
