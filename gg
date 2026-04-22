@@ -1,0 +1,101 @@
+#define BLYNK_TEMPLATE_ID "TMPL6R_IUZuI8"
+#define BLYNK_TEMPLATE_NAME "security cam simulation"
+#define BLYNK_AUTH_TOKEN "z6jOfNNkNwUN_kRs0bI2FTo0QM-x8cMu"
+
+#define BLYNK_PRINT Serial
+
+#include <WiFi.h>
+#include <BlynkSimpleEsp32.h>
+
+char ssid[] = "Wokwi-GUEST";
+char pass[] = "";
+char auth[] = BLYNK_AUTH_TOKEN;
+
+#define PIR_PIN 13
+#define MQ2_PIN 34
+#define LED_PIN 12
+
+#define SMOKE_THRESHOLD 1000
+
+bool motionActive = false;
+bool smokeActive = false;
+bool smokeTriggered = false;
+
+unsigned long motionTime = 0;
+unsigned long smokeTime = 0;
+
+BlynkTimer timer;
+
+void checkSensors() {
+
+  int motion = digitalRead(PIR_PIN);
+  int smoke = analogRead(MQ2_PIN);
+
+  // 🚶 MOTION DETECTION
+  if (motion == HIGH && !motionActive) {
+    motionActive = true;
+    motionTime = millis();
+
+    Serial.println("🚶 Motion detected");
+    Blynk.logEvent("motion_alert", "Motion detected!");
+  }
+
+  // 🔥 SMOKE DETECTION (ONLY ONCE PER EVENT)
+  if (smoke > SMOKE_THRESHOLD && !smokeTriggered) {
+    smokeTriggered = true;
+    smokeActive = true;
+    smokeTime = millis();
+
+    Serial.println("🔥 Smoke detected");
+    Blynk.logEvent("smoke_alert", "Smoke detected!");
+  }
+
+  // 💡 LED ON if any alert active
+  digitalWrite(LED_PIN, (motionActive || smokeActive) ? HIGH : LOW);
+
+  // ⏱ reset motion after 60s
+  if (motionActive && millis() - motionTime > 60000) {
+    motionActive = false;
+  }
+
+  // ⏱ reset smoke after 60s
+  if (smokeActive && millis() - smokeTime > 60000) {
+    smokeActive = false;
+    smokeTriggered = false;
+  }
+}
+
+void setup() {
+  Serial.begin(115200);
+
+  pinMode(PIR_PIN, INPUT);
+  pinMode(LED_PIN, OUTPUT);
+
+  WiFi.begin(ssid, pass);
+
+  Serial.print("Connecting WiFi");
+  int timeout = 0;
+
+  while (WiFi.status() != WL_CONNECTED && timeout < 20) {
+    delay(300);
+    Serial.print(".");
+    timeout++;
+  }
+
+  if (WiFi.status() == WL_CONNECTED) {
+    Serial.println("\nWiFi Connected");
+    Blynk.config(auth);
+    Blynk.connect();
+  } else {
+    Serial.println("\nWiFi Failed");
+  }
+
+  timer.setInterval(500L, checkSensors);
+}
+
+void loop() {
+  if (WiFi.status() == WL_CONNECTED) {
+    Blynk.run();
+  }
+  timer.run();
+}
