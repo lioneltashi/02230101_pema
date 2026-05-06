@@ -1,5 +1,3 @@
-#LAB 10: Counting Sort and Radix Sort
-
 # Part 1: Counting Sort
 
 def counting_sort(arr):
